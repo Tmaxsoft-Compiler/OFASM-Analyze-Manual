@@ -495,6 +495,25 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 |	CICS_EIBFN_RETRIEVE	|	cics_retrieve	|		|
 |	CICS_EIBFN_SPOOLREAD	|	cics_spoolread	|		|
 
+|	CICS copybook	|	note	|
+|	---	|	---	|
+|	DFHAID	|		|
+|	DFHBMSCA	|		|
+|	DFHEIBLK	|		|
+|	DFHGDEFS	|		|
+|	DFHCSADS	|		|
+
+|	CICS macro	|	note	|
+|	---	|	---	|
+|	DFHAFCD	|		|
+|	DFHEIEND	|		|
+|	DFHEIENT	|		|
+|	DFHEIRET	|		|
+|	DFHEISTG	|		|
+|	DFHSYS	|		|
+
+
+
 * System Macro
 
 |	System macro	| note |
