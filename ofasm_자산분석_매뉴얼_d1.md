@@ -4,18 +4,18 @@
 
 [1. 프로젝트 진행 전 고려해야 할 사항](#프로젝트-진행-전-고려해야-할-사항)
 
-[1.1. 32비트/64비트 바이너리](#32비트/64비트-바이너리)
- 
-[1.2. OFASM이 지원하는 명령어](#OFASM이-지원하는-명령어)
- 
-[1.3. 어셈블러 소스를 수정해야 하는 상황](#어셈블러-소스를-수정해야-하는-상황)
-
 [2. 프로젝트 진행 중 발생하는 문제들](#프로젝트-진행-중-발생하는-문제들)
-
 
 * * *
 
 ## 프로젝트 진행 전 고려해야 할 사항
+
+[1. 32비트/64비트 바이너리](#32비트/64비트-바이너리)
+ 
+[2. OFASM이 지원하는 명령어](#OFASM이-지원하는-명령어)
+ 
+[3. 어셈블러 소스를 수정해야 하는 상황](#어셈블러-소스를-수정해야-하는-상황)
+
 
 ### 32비트/64비트 바이너리
 
@@ -29,12 +29,71 @@ OFASM은 기본적으로 32비트 바이너리 사용을 권장한다.
 4. OSC를 함께 사용하는 경우, COMMAREA 등의 CICS 시스템 영역에 포인터 변수를 포함하여 데이터를 송수신 하지 않는다.
 </pre>
 
-### OFASM이 지원하는 명령어
+## 프로젝트 진행 중 어셈블러 자산 분석 과정
+
+프로젝트가 시작하면 어셈블러 자산은 아래와 같은 과정을 거쳐서 진행된다.
+
+[1. 전체 자산 컴파일 및 에러 메세지 확인](#전체-자산-컴파일-및-에러-메세지-확인)
+
+[2. 시스템 매크로 및 SVC 사용 목록 확인](#시스템-매크로-및-SVC-사용-목록-확인)
+
+[3. CICS 커맨드 확인](#CICS-커맨드-확인)
+
+[4. 포인터 파라미터 사용 여부 확인](#포인터-파라미터-사용-여부-확인)
+
+[5. EBCDIC 문자 확인](#EBCDIC-문자-확인)
+
+[6. 인터페이스 작성 방법](#인터페이스-작성-방법)
+
+### 전체 자산 컴파일 및 에러 메세지 확인
+
+### 시스템 매크로 및 SVC 사용 목록 확인
+
+### CICS 커맨드 확인
+
+우선, CICS에서 사용되는 자산인지 판단하기 위해서 자산에서 CICS 명령어를 사용하는지 확인한다. CICS 명령어는 아래와 같은 형태를 가지고 사용된다. 
+
+<pre>
+    EXEC CICS <명령어> <옵션1> <옵션2> ...
+</pre>
+
+위와 같은 명령어는 어셈블러 기계 명령어가 아니기 때문에 전처리를 통해 기계 명령어로 변환해주는 작업이 필요하다.
+
+이것은 cicsprep이라는 OSC관련 라이브러리를 통해 이루어지며, OFASM에서는 EXEC CICS~ 구문에 해당 라이브러리에서 제공하는 전처리 기능을 사용한다.
+
+CICS에서 사용되는 자산임이 확인된 경우에는 해당 자산을 컴파일 할 때, --enable-cics 옵션을 붙여서 컴파일 한다.
+
+<pre>
+    ofasm TEST.asm --enable-cics
+</pre>
+
+일부 CICS 명령어는 지원을 하지 않을 수도 있다. 그런 경우에는 아래와 같은 메세지가 출력된다.
+
+<pre>
+OFASMPP: INVALID SYNTAX FOUND IN CICS STATEMENT. IGNORING.
+cics_stmt : EXEC CICS CHANGE PASSWORD(OLDPWD) NEWPASSWORD(NEWPWD)            USERID(SYSUSER);
+</pre>
+
+위와 같은 메세지가 출력되면,
+
+> 1. OSC 담당자에게 cicsprep을 통한 전처리 기능을 요청한다.
+> 2. OSC 담당자에게 해당 CICS 명령어에 대한 기능을 요청한다.
+
+### 포인터 파라미터 사용 여부 확인
+
+### EBCDIC 문자 확인
+
+### 인터페이스 작성 방법
+
+OFASM을 이용하여 어셈블러 프로그램을 실행하기 위해서는 OFASM VM을 실행시키기 위한 인터페이스 프로그램이 필요하다.
+
+인터페이스에 관한 내용은 아래를 참고한다.
+
+//TODO: 인터페이스 관련 문서 링크 추가
+
+## OFASM이 지원하는 명령어
 
 OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
-
-//기계 명령어, 어셈블러 명령어, 전처리 명령어 모두 포함
-//SVC 및 그에 관련된 매크로도 포함
 
 * Preprocessing (Conditional assembly) Instruction
 
@@ -441,6 +500,7 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 |	NOPR	|		|	|
 
 * SVC Macro
+** 아래는 현재 OFASM에서 지원하고 있는 SVC 및 그와 연관된 매크로들이다.
 
 | SVC number | macro name | note |
 | --- | --- | --- |
@@ -476,24 +536,28 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 
 * CICS 
 
+** 아래는 OFASM 내부적으로 지원 하거나, 내부 동작을 거친 후에 cics 관련 함수를 호출하는 CICS 명령어들이다.
+
 | CICS type | CICS func | note |
 | --- | --- | --- |
-|	CICS_EIBFN_HANDLE_CONDITION	|		|		|
-|	CICS_EIBFN_GETMAIN	|	cics_getmain	|		|
-|	CICS_EIBFN_FREEMAIN	|	cics_freemain	|		|
-|	CICS_EIBFN_ADDRESS	|	cics_address	|		|
-|	CICS_EIBFN_LOAD	|	cics_load	|		|
-|	CICS_EIBFN_RELEASE	|	cics_release	|		|
-|	CICS_EIBFN_LINK	|		|		|
-|	CICS_EIBFN_READ	|	cics_read	|		|
-|	CICS_EIBFN_READQ_TS	|	cics_readq_ts	|		|
-|	CICS_EIBFN_READQ_TD	|	cics_readq_td	|		|
-|	CICS_EIBFN_READNEXT	|	cics_readnext	|		|
-|	CICS_EIBFN_READPREV	|	cics_readprev	|		|
-|	CICS_EIBFN_RECEIVE	|	cics_receive	|		|
-|	CICS_EIBFN_RECEIVE_MAP	|	cics_recive_map	|		|
-|	CICS_EIBFN_RETRIEVE	|	cics_retrieve	|		|
-|	CICS_EIBFN_SPOOLREAD	|	cics_spoolread	|		|
+|	HANDLE CONDITION	|		|		|
+|	GETMAIN	|	cics_getmain	|		|
+|	FREEMAIN	|	cics_freemain	|		|
+|	ADDRESS	|	cics_address	|		|
+|	LOAD	|	cics_load	|		|
+|	RELEASE	|	cics_release	|		|
+|	LINK	|		|		|
+|	READ	|	cics_read	|		|
+|	READQ TS	|	cics_readq_ts	|		|
+|	READQ TD	|	cics_readq_td	|		|
+|	READNEXT	|	cics_readnext	|		|
+|	READPREV	|	cics_readprev	|		|
+|	RECEIVE	|	cics_receive	|		|
+|	RECEIVE MAP	|	cics_recive_map	|		|
+|	RETRIEVE	|	cics_retrieve	|		|
+|	SPOOLREAD	|	cics_spoolread	|		|
+
+** 아래는 OFASM 내부적으로 지원하는 CICS 관련 카피북/매크로이다.
 
 |	CICS copybook	|	note	|
 |	---	|	---	|
@@ -512,9 +576,8 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 |	DFHEISTG	|		|
 |	DFHSYS	|		|
 
-
-
 * System Macro
+** 아래는 OFASM 내부적으로 지원하는 매크로들이다.
 
 |	System macro	| note |
 | --- | --- |
