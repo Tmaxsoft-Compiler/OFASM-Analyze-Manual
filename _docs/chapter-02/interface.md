@@ -1,3 +1,9 @@
+---
+title: 인터페이스 작성 방법
+category: Chapter 02
+order: 2
+---
+
 ## 인터페이스 작성 방법
 
 ### OFASM 인터페이스의 필요성

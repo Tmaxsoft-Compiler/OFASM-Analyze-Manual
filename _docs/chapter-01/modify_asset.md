@@ -1,3 +1,9 @@
+---
+title: 어셈블러 자산 수정 방법
+category: Chapter 01
+order: 6
+---
+
 ## 자산 수정이 필요한 경우
 
 ### Packed/Zoned Decimal 부호 변경

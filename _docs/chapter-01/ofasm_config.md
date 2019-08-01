@@ -1,3 +1,9 @@
+---
+title: Configure 파일 설정 방법
+category: Chapter 01
+order: 3
+---
+
 ## Configure 파일 설정 방법
 
 ### properties.conf 설정
