@@ -1,7 +1,7 @@
 ---
 title: OFASM이 지원하는 명령어
-category: Chapter 01
-order: 7
+category: Appendix
+order: 1
 ---
 
 ## OFASM 지원 명령어
@@ -25,6 +25,13 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 | SETA | O | |
 | SETB | O | |
 | SETC | O | data attribute O'(Operation Code) 미지원 |
+
+### Inner macro instruction
+
+| Instruction Name | OFASM testcase | note |
+| --- | --- | --- |
+| COPY  | X | |
+| MEXIT | X | |
 
 ### Assembler Instruction
 

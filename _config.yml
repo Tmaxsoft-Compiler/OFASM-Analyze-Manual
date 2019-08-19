@@ -2,7 +2,7 @@
 # Site
 
 title: OFASM source analysis
-url: "https://long-pig.cloudvent.net"
+url: "https://tmaxsoft-compiler.github.io/OFASM-Analyze-Manual/"
 baseurl:
 google_analytics_key:
 show_full_navigation: true
@@ -17,7 +17,7 @@ author:
 social:
   name: OFASM source analysis
   links:
-    - https://github.com/CloudCannon/edition-jekyll-template
+    - https://github.com/Tmaxsoft-Compiler/OFASM-Analyze-Manual
 
 # -----
 # Build
