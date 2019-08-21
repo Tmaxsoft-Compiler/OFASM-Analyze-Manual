@@ -127,7 +127,7 @@ CALL 'PROGGMT' USING TEMP-GMT.
 
 예를 들어 위와 같은 코볼 소스에서는 PROGGMT 어셈블러 프로그램을 호출할 때 TEMP-GMT라는 host variable을 파라미터로 사용한다는 것을 알 수 있다. 따라서 파라미터의 개수는 1개이며, 파라미터의 사이즈는 TEMP-GMT의 전체 사이즈인 것을 알 수 있다. Host variable인 TEMP-GMT는 아래와 같이 정의되어있다.
 
-<pre>
+```cobol
 01  TEMP-GMT.
     12 GMT-PREFIX.
        15 GMT-LL           PIC S9(4)  COMP   VALUE +28.
@@ -157,10 +157,10 @@ CALL 'PROGGMT' USING TEMP-GMT.
           18 GMT-HH-MM-SS  PIC X(08).
     12 GMT-IAK-TIMESTAMP   PIC X(08)         VALUE LOW-VALUE.
     12 FILLER              PIC X(140)        VALUE LOW-VALUE.
-</pre>
+```
 위 정의로부터 파라미터 사이즈를 계산해보면, 아래와 같다. //TODO: 사이즈 계산 레이아웃 결정
 
-<pre>
+```cobol
 01  TEMP-GMT.
     12 GMT-PREFIX.
        15 GMT-LL           PIC S9(4)  COMP   VALUE +28.
@@ -190,7 +190,7 @@ CALL 'PROGGMT' USING TEMP-GMT.
           18 GMT-HH-MM-SS  PIC X(08).
     12 GMT-IAK-TIMESTAMP   PIC X(08)         VALUE LOW-VALUE.
     12 FILLER              PIC X(140)        VALUE LOW-VALUE.
-</pre>
+```
 
 각 변수들이 차지하는 크기를 나열하고 전부 더해보면 269 바이트가 나온다. 따라서 TEMP-GMT 크기는 269 바이트이다.
 따라서, 위에 기술된 프로그램 PROGGMT에 대한 인터페이스 파일을 만들기 위해 JSON 파일을 아래와 같이 작성할 수 있다.

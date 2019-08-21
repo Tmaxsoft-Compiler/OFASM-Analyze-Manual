@@ -8,9 +8,9 @@ html {
 body {
 	height: 100%;
 	max-height: 100%;
-	font-family: "Merriweather", serif;
+	font-family: "Nanum Gothic";
 	letter-spacing: 0.01rem;
-	font-size: 1.8em;
+	font-size: 1.6em;
 	line-height: 1.75em;
 	color: #3A4145;
 	font-weight: 400;
@@ -34,7 +34,7 @@ table {
 	-webkit-font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
 	-moz-font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
 	-o-font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
-	font-family: "Open Sans", sans-serif;
+	font-family: "Nanum Gothic";
 	text-rendering: geometricPrecision;
 }
 
@@ -45,24 +45,24 @@ h4,
 h5,
 h6 {
 	color: #2E2E2E;
-	line-height: 1.15em;
+	line-height: 1em;
 	margin: 0 0 0.4em 0;
 	font-weight: 600;
 }
 
 h1 {
-	font-size: 5rem;
+	font-size: 4.5rem;
 	letter-spacing: -2px;
 	text-indent: -3px;
 }
 
 h2 {
-	font-size: 3.6rem;
+	font-size: 3.2rem;
 	letter-spacing: -1px;
 }
 
 h3 {
-	font-size: 3rem;
+	font-size: 2.8rem;
 }
 
 h4 {
@@ -70,11 +70,11 @@ h4 {
 }
 
 h5 {
-	font-size: 2rem;
+	font-size: 1.8rem;
 }
 
 h6 {
-	font-size: 2rem;
+	font-size: 1.8rem;
 }
 
 a {
