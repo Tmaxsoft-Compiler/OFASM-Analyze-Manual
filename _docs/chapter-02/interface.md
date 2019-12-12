@@ -248,7 +248,7 @@ CALL 'PROGGMT' USING TEMP-GMT.
 {
     "entry_list" : 
     [{
-        "entry_name" : "PROGGMT",
+        "entry_name" : "ASMPTR",
         "fixed_parameter_list" : 
         [
             {
@@ -259,9 +259,113 @@ CALL 'PROGGMT' USING TEMP-GMT.
             }
         ]
     }],
-"program_name" : "PROGGMT",
+"program_name" : "ASMPTR",
 
 "version" : 3
+}
+```
+
+JSON 파일을 통해 생성된 인터페이스는 다음과 같다
+
+``` c++
+#include <stdlib.h>
+#include <string.h>
+#include <arpa/inet.h>
+
+struct ofasm_param
+{
+    long long length;
+    long long elemCnt;
+    char *addr;
+    char *elemListAddr;
+};
+
+extern int OFASM_VM_ENTRY(const char *progName, ofasm_param param[], int paramCnt); // DEPRECATED
+extern int OFASM_VM_ENTRY(const char *progName, const char *entryName, ofasm_param param[], int paramCnt);
+
+/*build header for ptr parameter*/
+extern unsigned int OFASM_PUSH_PARAM(char* ptr, int length);
+extern char *OFASM_POP_PARAM(unsigned int addr);
+
+struct __attribute__((packed)) ASMPTR_P0_ASM
+{
+    uint8_t buffer0[16];
+    uint32_t addr0;
+    uint32_t addr1;
+    uint8_t buffer2[12];
+    uint32_t addr2;
+};
+
+struct __attribute__((packed)) ASMPTR_P0_COB
+{
+    uint8_t buffer0[16];
+    char *addr0;
+    char *addr1;
+    uint8_t buffer2[12];
+    char *addr2;
+};
+
+int ASMPTR_P0_OFASM_PUSH(ASMPTR_P0_ASM* p0_asm, ASMPTR_P0_COB* p0_cob)
+{
+    memcpy(p0_asm->buffer0, p0_cob->buffer0, sizeof(p0_cob->buffer0));
+    p0_asm->addr0 = OFASM_PUSH_PARAM(p0_cob->addr0, 4);
+    p0_asm->addr1 = OFASM_PUSH_PARAM(p0_cob->addr1, 4);
+    memcpy(p0_asm->buffer2, p0_cob->buffer2, sizeof(p0_cob->buffer2));
+    p0_asm->addr2 = OFASM_PUSH_PARAM(p0_cob->addr2, 4);
+    return 0;
+};
+
+int ASMPTR_P0_OFASM_POP(ASMPTR_P0_ASM* p0_asm, ASMPTR_P0_COB* p0_cob)
+{
+    memcpy(p0_cob->buffer0, p0_asm->buffer0, sizeof(p0_asm->buffer0));
+    p0_cob->addr0 = OFASM_POP_PARAM(p0_asm->addr0);
+    p0_cob->addr1 = OFASM_POP_PARAM(p0_asm->addr1);
+    memcpy(p0_cob->buffer2, p0_asm->buffer2, sizeof(p0_asm->buffer2));
+    p0_cob->addr2 = OFASM_POP_PARAM(p0_asm->addr2);
+    return 0;
+};
+
+extern "C" 
+{
+
+extern int ofcom_call_parm_get(int index, char* func_name, int *count, int **size_list);
+
+/** @fn       int ASMPTR(char *p0)
+*   @brief    Enter OFASM VM entry method
+*   @details  Make up ofasm parameters and then enter OFASM VM entry using entry name
+*   @params   p0 0th parameter in PLIST
+*/
+int ASMPTR(char *p0)
+{
+    /* declare local arguments */
+    int rc;
+    int paramCnt;
+    ofasm_param param[1];
+
+    /* declare local arguments for pointer parameter*/
+    ASMPTR_P0_ASM  p0_asm;
+    ASMPTR_P0_COB* p0_cob = (ASMPTR_P0_COB*) p0;
+
+    /* set params */
+    param[0].length = 40;
+    /* call push parameter*/
+    ASMPTR_P0_OFASM_PUSH(&p0_asm, p0_cob);
+    param[0].addr = (char*) &p0_asm;
+    param[0].elemListAddr = NULL;
+    param[0].elemCnt = 0;
+
+    /* set param count */
+    paramCnt = 1;
+
+    /* call VM */
+    rc = OFASM_VM_ENTRY("ASMPTR", "ASMPTR", param, paramCnt);
+
+    /* call pop parameter*/
+    ASMPTR_P0_OFASM_POP(&p0_asm, p0_cob);
+
+    return rc;
+}
+
 }
 ```
 
@@ -419,4 +523,102 @@ Load 인터페이스 파일을 생성하기 위한 JSON 파일 작성 방법은 
 "interface_type" : "load"
 }
 ```
+Load 인터페이스 또한 Load 인터페이스에 대한 함수 이름과 함께 파일 이름도 동일한 규약을 가진다. *“호출할 프로그램의 이름 + _OFASM_VM_LOAD.so”* 가 되어야 한다.
 
+예를 들어, 포인터 타입을 포함하는 경우 JSON 파일은 다음과 같이 작성된다.
+
+```json
+{
+    "entry_list" :
+    [
+        {
+            "entry_name" : "LTEST",
+            "fixed_parameter_list" : [
+            {
+               "param_size" : 40,
+               "param_type" : "P",
+               "pointer_offset_list" : [ 16, 20, 36 ],
+               "pointer_size_list" : [ 4, 4, 4 ]
+            }
+            ]
+        }
+    ],
+    "program_name" : "LTEST",
+    "version" : 3,
+    "interface_type" : "load" 
+}
+```
+
+JSON 파일을 통해 생성된 Load 인터페이스는 다음과 같다.
+
+``` c++
+#include <stdlib.h>
+#include <string.h>
+#include <arpa/inet.h>
+#include <stdio.h>
+
+extern "C" 
+{
+
+/**
+ *    @brief The LTEST_STRUCT_ASM struct
+ */
+struct __attribute__((packed)) LTEST_STRUCT_ASM
+{
+    uint8_t buffer0[16];
+    uint32_t addr0;
+    uint32_t addr1;
+    uint8_t buffer2[12];
+    uint32_t addr2;
+};
+
+/**
+ *    @brief The LTEST_STRUCT_COB struct
+ */
+struct __attribute__((packed)) LTEST_STRUCT_COB
+{
+    uint8_t buffer0[16];
+    char *addr0;
+    char *addr1;
+    uint8_t buffer2[12];
+    char *addr2;
+};
+
+/**
+ * @brief LTEST_OFASM_VM_LOAD_SIZE return byte size ofLTEST_STRUCT_COB
+* @return byte size ofLTEST_STRUCT_COB (msut be 1 or higher)
+ */
+int LTEST_OFASM_VM_LOAD_SIZE()
+{
+    return sizeof(LTEST_STRUCT_COB);
+}
+
+/**
+ * @brief LTEST_OFASM_VM_LOAD
+ * @param asm_ptr address of LTEST_STRUCT_ASM
+ * @param cob_ptr address of LTEST_STRUCT_COB
+ * @param asm_size byte size of assembler file
+ * @return 0: success, -1: error
+ */
+int LTEST_OFASM_VM_LOAD(char *asm_ptr, char *cob_ptr, int asm_size)
+{
+    int ltest_struct_asm_size = sizeof(LTEST_STRUCT_ASM);
+    if(asm_size != ltest_struct_asm_size) {
+        printf("LTEST_OFASM_VM_LOAD: LTEST.asm & LTEST_STRUCT_ASM SIZE IS NOT EQUAL\n");
+        return -1;
+    }
+
+    LTEST_STRUCT_ASM* ltest_struct_asm_ptr = (LTEST_STRUCT_ASM*) asm_ptr;
+    LTEST_STRUCT_COB* ltest_struct_cob_ptr = (LTEST_STRUCT_COB*) cob_ptr;
+
+    memcpy(ltest_struct_cob_ptr->buffer0, ltest_struct_asm_ptr->buffer0, sizeof(ltest_struct_asm_ptr->buffer0));
+    ltest_struct_cob_ptr->addr0 = ltest_struct_asm_ptr->addr0;
+    ltest_struct_cob_ptr->addr1 = ltest_struct_asm_ptr->addr1;
+    memcpy(ltest_struct_cob_ptr->buffer2, ltest_struct_asm_ptr->buffer2, sizeof(ltest_struct_asm_ptr->buffer2));
+    ltest_struct_cob_ptr->addr2 = ltest_struct_asm_ptr->addr2;
+
+    return rc;
+}
+
+}
+```
