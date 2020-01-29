@@ -3,7 +3,7 @@
 
 title: OFASM source analysis
 url: "https://tmaxsoft-compiler.github.io/OFASM-Analyze-Manual/"
-baseurl:
+baseurl: /OFASM-Analyze-Manual
 google_analytics_key:
 show_full_navigation: true
 
