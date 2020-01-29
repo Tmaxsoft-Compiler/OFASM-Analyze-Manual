@@ -507,3 +507,12 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 |	SYSSTATE	| |
 |	TIMEUSED	| |
 |	YREGS	| |
+
+### Parsing only instruction
+
+|   Instruction |   Desc.   |
+|   LAM         |   -   |
+|   SSK         |   -   |
+|   SSKE        |   -   |
+|   SSM         |   -   |
+|   TAM         |   -   |

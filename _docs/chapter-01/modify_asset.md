@@ -135,6 +135,3 @@ TAB1    CL256' '
 CICS 커맨드를 사용하는 어셈블러 자산의 경우 대개 DFHEIENT 매크로로 소스 코드가 시작하는 경우가 많다. 하지만 메인프레임에서는 CSECT나 START로 시작하는 CICS 사용 자산에 대해 자동적으로 CSECT 및 START 명령어 뒤에 DFHEIENT 매크로를 삽입해주는데, OFASM의 경우 일부 케이스에 한해서만 해당 매크로를 삽입해준다. 
 다시 말해, 일부 케이스에 대해서는 DFHEIENT 매크로를 수동으로 넣어줘야한다.
 DFHEIRET 매크로도 마찬가지인데, END 명령어가 나오기 전에 DFHEIRET 매크로를 삽입 해주어야 하는 일부 케이스가 있다. 
-
-//TODO: DFHEIENT 및 DFHEIRET을 사용하지 않았을 때 발생하는 에러 케이스들 정리
-

@@ -170,39 +170,40 @@ CALL 'PROGGMT' USING TEMP-GMT.
     12 GMT-IAK-TIMESTAMP   PIC X(08)         VALUE LOW-VALUE.
     12 FILLER              PIC X(140)        VALUE LOW-VALUE.
 ```
-위 정의로부터 파라미터 사이즈를 계산해보면, 아래와 같다. //TODO: 사이즈 계산 레이아웃 결정
 
-```cobol
-01  TEMP-GMT.
-    12 GMT-PREFIX.
-       15 GMT-LL           PIC S9(4)  COMP   VALUE +28.
-       15 GMT-VERSION      PIC S9(4)  COMP   VALUE +1.
-       15 GMT-ID           PIC  X(8)         VALUE 'TEMPGMT '.
-          88 GMT-ID-OK                       VALUE 'TEMPGMT '.
-    12 GMT-RC              PIC  9(4)  BINARY VALUE 0.
-    12 GMT-FC              PIC  XX           VALUE 'AT'.
-       88 GMT-GET-ACTUAL-TIME                VALUE 'AT'.
-       88 GMT-CONVERT-IAK-TS                 VALUE 'CI'.
-    12 GMT-TOD             PIC  9(18) BINARY VALUE 0.
-    12 GMT-MICSEC          PIC  9(18) BINARY VALUE 0.
-    12 GMT-MS-DEC          PIC  9(15) COMP-3 VALUE 0.
-    12 GMT-CICS-ABSTIME    PIC  9(15) COMP-3 VALUE 0.
-    12 GMT-HHMMSSTHMIJU    PIC  9(13) COMP-3 VALUE 0.
-    12 GMT-YYYYDDD         PIC  9(07) COMP-3 VALUE 0.
-    12 GMT-YYYYMMDD        PIC  9(08) COMP-3 VALUE 0.
-    12 GMT-HHMMSS          PIC  9(06)        VALUE 0.
-    12 GMT-MILLISEC        PIC  9(03) COMP-3 VALUE 0.
-    12 GMT-MICROSEC        PIC  9(06) COMP-3 VALUE 0.
-    12 GMT-ED-TIMESTAMP.
-       15 GMT-DD-MM-YYYY   PIC  X(11)        VALUE ' '.
-       15 GMT-HH-MM-SS-MIC PIC  X(15)        VALUE ' '.
-       15 FILLER           REDEFINES GMT-HH-MM-SS-MIC.
-          18 GMT-HH-MM-SS-MIL PIC X(12).
-       15 FILLER           REDEFINES GMT-HH-MM-SS-MIC.
-          18 GMT-HH-MM-SS  PIC X(08).
-    12 GMT-IAK-TIMESTAMP   PIC X(08)         VALUE LOW-VALUE.
-    12 FILLER              PIC X(140)        VALUE LOW-VALUE.
-```
+위 정의로부터 파라미터 사이즈를 계산해보면, 아래와 같다.
+| Value Name                                                    |   Size        |
+| ---                                                           |   ---         |
+| 01  TEMP-GMT.                                                 |               |
+|    12 GMT-PREFIX.                                             |               |
+|       15 GMT-LL           PIC S9(4)  COMP   VALUE +28.        |     2         |
+|       15 GMT-VERSION      PIC S9(4)  COMP   VALUE +1.         |     2         |
+|       15 GMT-ID           PIC  X(8)         VALUE 'TEMPGMT '. |     8         |
+|          88 GMT-ID-OK                       VALUE 'TEMPGMT '. |               |
+|    12 GMT-RC              PIC  9(4)  BINARY VALUE 0.          |     2         |
+|    12 GMT-FC              PIC  XX           VALUE 'AT'.       |     2         |
+|       88 GMT-GET-ACTUAL-TIME                VALUE 'AT'.       |               |
+|       88 GMT-CONVERT-IAK-TS                 VALUE 'CI'.       |               |
+|    12 GMT-TOD             PIC  9(18) BINARY VALUE 0.          |     8         |
+|    12 GMT-MICSEC          PIC  9(18) BINARY VALUE 0.          |     8         |
+|    12 GMT-MS-DEC          PIC  9(15) COMP-3 VALUE 0.          |     8         |
+|    12 GMT-CICS-ABSTIME    PIC  9(15) COMP-3 VALUE 0.          |     8         |
+|    12 GMT-HHMMSSTHMIJU    PIC  9(13) COMP-3 VALUE 0.          |     7         |
+|    12 GMT-YYYYDDD         PIC  9(07) COMP-3 VALUE 0.          |     4         |
+|    12 GMT-YYYYMMDD        PIC  9(08) COMP-3 VALUE 0.          |     4         |
+|    12 GMT-HHMMSS          PIC  9(06)        VALUE 0.          |     6         |
+|    12 GMT-MILLISEC        PIC  9(03) COMP-3 VALUE 0.          |     2         |
+|    12 GMT-MICROSEC        PIC  9(06) COMP-3 VALUE 0.          |     4         |
+|    12 GMT-ED-TIMESTAMP.                                       |               |
+|       15 GMT-DD-MM-YYYY   PIC  X(11)        VALUE ' '.        |     11        |
+|       15 GMT-HH-MM-SS-MIC PIC  X(15)        VALUE ' '.        |     15        |
+|       15 FILLER           REDEFINES GMT-HH-MM-SS-MIC.         |               |
+|          18 GMT-HH-MM-SS-MIL PIC X(12).                       |     12        |
+|       15 FILLER           REDEFINES GMT-HH-MM-SS-MIC.         |               |
+|          18 GMT-HH-MM-SS  PIC X(08).                          |     8         |
+|    12 GMT-IAK-TIMESTAMP   PIC X(08)         VALUE LOW-VALUE.  |     8         |
+|    12 FILLER              PIC X(140)        VALUE LOW-VALUE.  |     140       |
+
 
 각 변수들이 차지하는 크기를 나열하고 전부 더해보면 269 바이트가 나온다. 따라서 TEMP-GMT 크기는 269 바이트이다.
 따라서, 위에 기술된 프로그램 PROGGMT에 대한 인터페이스 파일을 만들기 위해 JSON 파일을 아래와 같이 작성할 수 있다.
@@ -223,6 +224,58 @@ CALL 'PROGGMT' USING TEMP-GMT.
 "program_name" : "PROGGMT",
 
 "version" : 3
+}
+```
+
+JSON 파일을 통해 생성된 인터페이스는 아래와 같다
+
+```cpp
+#include <stdlib.h>
+#include <string.h>
+#include <arpa/inet.h>
+
+struct ofasm_param
+{
+    long long length;
+    long long elemCnt;
+    char *addr;
+    char *elemListAddr;
+};
+
+extern int OFASM_VM_ENTRY(const char *progName, ofasm_param param[], int paramCnt); // DEPRECATED
+extern int OFASM_VM_ENTRY(const char *progName, const char *entryName, ofasm_param param[], int paramCnt);
+
+extern "C"
+{
+
+extern int ofcom_call_parm_get(int index, char* func_name, int *count, int **size_list);
+
+/** @fn       int PROGGMT(char *p0)
+*   @brief    Enter OFASM VM entry method
+*   @details  Make up ofasm parameters and then enter OFASM VM entry using entry name
+*   @params   p0 0th parameter in PLIST
+*/
+int PROGGMT(char *p0)
+{
+    /* declare local arguments */
+    int rc;
+    int paramCnt;
+    ofasm_param param[1];
+
+    /* set params */
+    param[0].length = 269;
+    param[0].addr = p0;
+    param[0].elemListAddr = NULL;
+    param[0].elemCnt = 0;
+
+    /* set param count */
+    paramCnt = 1;
+
+    /* call VM */
+    rc = OFASM_VM_ENTRY("PROGGMT", "PROGGMT", param, paramCnt);
+    return rc;
+}
+
 }
 ```
 
