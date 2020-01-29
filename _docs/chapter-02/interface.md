@@ -675,3 +675,13 @@ int LTEST_OFASM_VM_LOAD(char *asm_ptr, char *cob_ptr, int asm_size)
 
 }
 ```
+
+#### Load 인터페이스 파일 컴파일
+
+Load 인터페이스 파일은 아래와 같은 명령어로 컴파일 한다.
+
+<pre>
+g++ -fPIC –shared –o LTEST_OFASM_VM_LOAD.so LTEST_OFASM_VM_LOAD.cpp
+</pre>
+
+ 출력 파일의 이름에도 역시 주목하길 바란다. Load 인터페이스에 대한 함수 이름과 함께 파일 이름도 동일한 규약을 가진다. *“호출할 프로그램의 이름 + _OFASM_VM_LOAD.so”* 가 되어야 한다. 
