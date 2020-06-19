@@ -419,8 +419,10 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 |	NOP	|	O	|	|
 |	NOPR	|		|	|
 
-### SVC Macro
+### SVC
 아래는 현재 OFASM에서 지원하고 있는 SVC 및 그와 연관된 매크로들이다.
+
+* 각 매크로가 사용하는 옵션은 현재 지원 하지 않는 것이 있을 수 있다. 확인 가능한 옵션에 대해서만 미지원/지원 여부를 표시해놓았다. 
 
 | SVC number | macro name | note |
 | --- | --- | --- |
@@ -446,7 +448,7 @@ OFASM이 지원하는 명령어는 아래 리스트를 참고한다.
 |	SVC 29	|	SCRATCH	|	CAMLIST: SCRATCH 만 지원	|
 |	SVC 35	|	WTO/WTOR	|		|
 |	SVC 40	|	EXTRACT	|	FIELDS=(TIOT/TSO) 만 지원	|
-|	SVC 47	|	STIMER/STIMERM	|	BINTVL,DINTVL 만 지원	|
+|	SVC 47	|	STIMER/STIMERM	|	STIMERM은 미지원, STIMER 옵션 중 BINTVL,DINTVL만 지원	|
 |	SVC 48	|	DEQ	|		|
 |	SVC 51	|	SNAP or SNAPX/SDUMP or SDUMPX	|		|
 |	SVC 56	|	ENQ	|		|
