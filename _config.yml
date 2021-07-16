@@ -9,15 +9,14 @@ show_full_navigation: true
 
 # Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
 logo: /siteicon.png
-description: Product documentation template for Jekyll.
+description: OFASM Documentaion for Openframe Engineer
 author:
-  name:
-  email:
+  name: Minseong Lee
+  email: minseong_lee@tmax.co.kr
   twitter: # twitter username without the @ symbol
 social:
-  name: OFASM source analysis
+  name:
   links:
-    - https://github.com/Tmaxsoft-Compiler/OFASM-Analyze-Manual
 
 # -----
 # Build
