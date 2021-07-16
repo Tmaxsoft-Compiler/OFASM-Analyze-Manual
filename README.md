@@ -1,4 +1,5 @@
 # OFASM-Analyze-Manual
-How to analyze OFASM asset before beginning project or POC
+
+OFASM using guide for Openframe engineer
 
 Please refer [Wiki](https://github.com/Tmaxsoft-Compiler/OFASM-Analyze-Manual/wiki)
