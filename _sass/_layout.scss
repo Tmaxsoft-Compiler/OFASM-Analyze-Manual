@@ -173,7 +173,7 @@ $nav-image: $baseurl + "/images/menu.svg";
 .page-header {
 	max-width: $content-max-width;
 	padding: 0 ($space + 5) $space;
-	margin: $space auto 0 auto;
+//	margin: 0 auto 0 auto;
 }
 
 .page-header {
@@ -231,7 +231,7 @@ nav > ul {
 .nav-item {
 	display: block;
 	font-family: "Open Sans", sans-serif;
-	line-height: 1;
+	line-height: 5%;
 	margin: 0;
 
 	nav:not(.full-navigation) & > ul {
@@ -243,17 +243,22 @@ nav > ul {
 	}
 
 	> a {
-		color: #666;
+		color: #fff;
 		text-decoration: none;
-		font-size: 1.4rem;
+		font-size: 1.2rem;
 		padding: $space / 2 0 $space / 2 $space * 2;
 		display: block;
 	}
 
-	&.current > a,
-	> a:active,
+	&.current > a {
+		background-color: mix($brand-colour, $content-background-color, 40%);
+		font-weight: bold;
+	}
+
+//	&.current > a,
+	&.active,
 	> a:hover {
-		color: #111;
+		background-color: mix($brand-colour, $content-background-color, 40%);
 	}
 
 	&.top-level > a {
