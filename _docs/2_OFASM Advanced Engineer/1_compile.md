@@ -1,7 +1,7 @@
 ---
 title: 컴파일 방법
-category: Chapter 01
-order: 2
+category: OFASM Advanced Engineer
+order: 1
 ---
 
 ## 컴파일

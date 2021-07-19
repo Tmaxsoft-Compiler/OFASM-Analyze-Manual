@@ -1,6 +1,6 @@
 ---
 title: 인터페이스 작성 방법
-category: Chapter 02
+category: OFASM Advanced Engineer
 order: 2
 ---
 

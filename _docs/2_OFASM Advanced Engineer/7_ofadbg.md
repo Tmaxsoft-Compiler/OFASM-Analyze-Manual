@@ -1,7 +1,7 @@
 ---
-title: 디버그
-category: Chapter 02
-order: 3
+title: OFASM 디버깅
+category: OFASM Advanced Engineer
+order: 7
 ---
 
 ## 자산 내 디버깅 메세지 삽입 방법
@@ -11,7 +11,7 @@ OFASM 프로그램 실행 도중 레지스터와 특정 VM 메모리 영역을 �
 ### OFADBGREG
 
 <pre>
-    OFADBGREG   I1
+    OFADBGREG   1
 </pre>
 
 I format. OFADBGREG 명령어의 기본적인 기능은 레지스터에 저장된 값을 stdout으로 출력하기 위함이다. 하지만 아래에 정리된 것과 같이, 피연산자에 따라 다양한 기능을 제공한다. 이러한 기능들은 보통 런타임 과정에서 생기는 문제들을 분석하기 위한 용도로 사용된다.

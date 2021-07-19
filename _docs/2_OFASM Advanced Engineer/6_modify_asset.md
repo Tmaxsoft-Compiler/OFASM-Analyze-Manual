@@ -1,6 +1,6 @@
 ---
 title: 어셈블러 자산 수정 방법
-category: Chapter 01
+category: OFASM Advanced Engineer
 order: 6
 ---
 

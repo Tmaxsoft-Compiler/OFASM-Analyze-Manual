@@ -1,6 +1,6 @@
 ---
 title: Configure 파일 설정 방법
-category: Chapter 01
+category: OFASM Advanced Engineer
 order: 3
 ---
 

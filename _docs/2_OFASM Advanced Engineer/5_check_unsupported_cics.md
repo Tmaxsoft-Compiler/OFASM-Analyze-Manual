@@ -1,6 +1,6 @@
 ---
 title: 미지원 CICS 커맨드 확인
-category: Chapter 01
+category: OFASM Advanced Engineer
 order: 5
 ---
 
