@@ -1,6 +1,6 @@
 ---
 title: 시스템 매크로 확인
-category: Chapter 01
+category: OFASM Advanced Engineer
 order: 4
 ---
 
