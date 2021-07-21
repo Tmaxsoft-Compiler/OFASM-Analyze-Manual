@@ -1,13 +1,14 @@
 ---
-title: OFASM Tutorial Environment
+title: 환경 구성
 category: OFASM Novice Engineer
 order: 1
 ---
 
 ## 목차 
-* 환경 구성
-  * 설치
-  * 설치 확인
+- [목차](#목차)
+- [환경 구성](#환경-구성)
+  - [설치](#설치)
+  - [설치 확인](#설치-확인)
 
 ---
 

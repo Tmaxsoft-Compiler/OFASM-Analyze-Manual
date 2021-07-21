@@ -1,24 +1,26 @@
 ---
-title: OFASM Tutorial Operation
+title: 시작하기
 category: OFASM Novice Engineer
 order: 3
 ---
 
 ## 목차 
-* ASM 호출 및 파라미터 운용
-  * JCL 에서 호출되는 ASM
-  * COBOL 에서 호출되는 ASM
-    * Fixed parameter 로 전달
-    * variable parameter 로 전달
-    * pointer parameter 로 전달
-  * ASM 에서 호출되는 COBOL
-    * fixed parameter 로 전달
-    * pointer parameter 로 전달
-* Dataset 운용
-  * NonVsam dataset I/O
-  * Vsam dataset I/O
+- [목차](#목차)
+- [ASM 호출 및 파라미터 운용](#asm-호출-및-파라미터-운용)
+  - [JCL 에서 호출되는 ASM](#jcl-에서-호출되는-asm)
+  - [COBOL 에서 호출되는 ASM](#cobol-에서-호출되는-asm)
+    - [Fixed parameter 로 전달](#fixed-parameter-로-전달)
+    - [Variable parameter 로 전달](#variable-parameter-로-전달)
+    - [Pointer parameter 로 전달](#pointer-parameter-로-전달)
+  - [ASM 에서 호출되는 COBOL](#asm-에서-호출되는-cobol)
+    - [Fixed parameter 로 전달](#fixed-parameter-로-전달-1)
+    - [Pointer parameter 로 전달](#pointer-parameter-로-전달-1)
+- [Dataset 운용](#dataset-운용)
+  - [NonVsam dataset I/O](#nonvsam-dataset-io)
+  - [Vsam dataset I/O](#vsam-dataset-io)
 
 ---
+
 
 ## ASM 호출 및 파라미터 운용
 
@@ -30,7 +32,7 @@ order: 3
 
 1. TESTASM3.asm 이름으로 아래 asm 소스 작성
 
-        TESTASM3     CSECT
+        TESTASM3    CSECT
                     LR 12,15
                     USING TESTASM3,12
         *
@@ -48,39 +50,39 @@ order: 3
                     CLI    OPERATOR,C'/'
                     BE    DIVIDE
         *
-        ADD          EQU   *
+        ADD         EQU   *
                     AP    OP1DEC,OP2DEC
                     B     ENDPGM
         *
-        SUBTRACT     EQU   *
+        SUBTRACT    EQU   *
                     SP    OP1DEC,OP2DEC
                     B     ENDPGM
         *
-        MULTIPLY     EQU   *
+        MULTIPLY    EQU   *
                     MP    OP1DEC,OP2DEC
                     B     ENDPGM
         *
-        DIVIDE       EQU   *
+        DIVIDE      EQU   *
                     DP    OP1DEC,OP2DEC
                     B     ENDPGM
         *
-        ENDPGM       EQU   *
+        ENDPGM      EQU   *
                     UNPK  RESULT,OP1DEC
                     OFADBGMEM RESULTMSG,1
                     SR    15,15
                     BR    14
-        RESULTMSG    DS 0CL14
+        RESULTMSG   DS 0CL14
                     DC CL10'Answer is '
-        RESULT       DS ZL4
+        RESULT      DS ZL4
         *
-        OP1DEC       DS PL2
-        OP2DEC       DS PL2
+        OP1DEC      DS PL2
+        OP2DEC      DS PL2
         *
-        ARITHMETIC   DSECT
+        ARITHMETIC  DSECT
                     DS CL2
-        OPERAND1     DS ZL2
-        OPERATOR     DS CL1
-        OPERAND2     DS ZL2
+        OPERAND1    DS ZL2
+        OPERATOR    DS CL1
+        OPERAND2    DS ZL2
                     END
 
 
@@ -97,14 +99,15 @@ order: 3
 
         {
         "entry_list" : [
-        {
+          {
             "entry_name" : "TESTASM3",
-            "fixed_parameter_list" : [
-            {
-                "param_type" : "V"
-            }
-            ]
-        }
+            "fixed_parameter_list" : 
+             [
+                {
+                   "param_type" : "V"
+                }
+             ]
+          }
         ],
         "program_name" : "TESTASM3",
         "version" : 3
@@ -114,10 +117,10 @@ order: 3
 
         {
         "entry_list" : [
-        {
+          {
             "entry_name" : "TESTASM3",
             "fixed_parameter_list" : []
-        }
+          }
         ],
         "program_name" : "TESTASM3",
         "version" : 3
@@ -158,7 +161,6 @@ order: 3
         > Length=[0000000000000014], Hex=[0x416e737765722069732030333330], Char=[Answer is 0330]
 
 
-----------------------------------------------------------------
 
 ### COBOL 에서 호출되는 ASM
 
@@ -170,7 +172,7 @@ order: 3
 
 1. TESTASM4.asm 이름으로 아래와 같이 asm 코드를 작성한다.
 
-        TESTASM4     CSECT
+        TESTASM4    CSECT
                     LR 12,15
                     USING TESTASM4,12
                     L     2,0(1)
@@ -189,39 +191,39 @@ order: 3
                     CLI   OPERATOR,C'/'
                     BE    DIVIDE
         *
-        ADD          EQU   *
+        ADD         EQU   *
                     A     2,OPERAND2
                     B     ENDPGM
         *
-        SUBTRACT     EQU   *
+        SUBTRACT    EQU   *
                     S     2,OPERAND2
                     B     ENDPGM
         *
-        MULTIPLY     EQU   *
+        MULTIPLY    EQU   *
                     LA    3,0(2)
                     M     2,OPERAND2
                     LA    2,0(3)
                     B     ENDPGM
         *
-        DIVIDE       EQU   *
+        DIVIDE      EQU   *
                     LA    3,0(2)
                     D     2,OPERAND2
                     LA    2,0(3)
                     B     ENDPGM
         *
-        ENDPGM       EQU   *
+        ENDPGM      EQU   *
                     CVD   2,OPERAND1
                     UNPK  RESULT,OPERAND1
                     OFADBGMEM RESULTMSG,1
                     SR    15,15
                     BR    14
-        RESULTMSG    DS 0CL14
+        RESULTMSG   DS 0CL14
                     DC CL10'Answer is '
-        RESULT       DS ZL4
+        RESULT      DS ZL4
         *
-        OPERAND1     DS PL8
-        OPERATOR     DS CL1
-        OPERAND2     DS FL4
+        OPERAND1    DS PL8
+        OPERATOR    DS CL1
+        OPERAND2    DS FL4
                     END
 
 
@@ -275,23 +277,23 @@ order: 3
 
         {
         "entry_list" : [
-        {
+         {
             "entry_name" : "TESTASM4",
             "fixed_parameter_list" : [
-            {
-                "param_size" : 4,
-                "param_type" : "NP"
-            },
-            {
-                "param_size" : 1,
-                "param_type" : "NP"
-            },
-            {
-                "param_size" : 4,
-                "param_type" : "NP"
-            }
+                {
+                        "param_size" : 4,
+                        "param_type" : "NP"
+                },
+                {
+                        "param_size" : 1,
+                        "param_type" : "NP"
+                },
+                {
+                        "param_size" : 4,
+                        "param_type" : "NP"
+                }
             ]
-        }
+         }
         ],
         "program_name" : "TESTASM4",
         "version" : 3
@@ -334,32 +336,32 @@ order: 3
 1. TESTASM5.asm 이름으로 아래와 같이 asm 코드를 작성한다.
 
         TESTASM5  CSECT
-                LR 12,15
-                USING TESTASM5,12
-                MVC CONTENT(50),=X'00'
-                LA  3,0(1)
-                LA  5,CONTENT
+                  LR 12,15
+                  USING TESTASM5,12
+                  MVC CONTENT(50),=X'00'
+                  LA  3,0(1)
+                  LA  5,CONTENT
         *
         LOOP      EQU *
-                L   2,0(3)
-                MVC WORD,0(2)
-                MVC 0(8,5),WORD 
-                LA  5,8(5)
-                CLI 4(3),X'80'
-                BE  FINAL
-                LA  3,4(3)
-                BNE LOOP
+                  L   2,0(3)
+                  MVC WORD,0(2)
+                  MVC 0(8,5),WORD 
+                  LA  5,8(5)
+                  CLI 4(3),X'80'
+                  BE  FINAL
+                  LA  3,4(3)
+                  BNE LOOP
         *
         FINAL     EQU *
-                LA  3,4(3)
-                L   2,0(3)
-                MVC WORD,0(2)
-                MVC 0(8,5),WORD
-                OFADBGMEM CONTENT,1
-                BR  14
+                  LA  3,4(3)
+                  L   2,0(3)
+                  MVC WORD,0(2)
+                  MVC 0(8,5),WORD
+                  OFADBGMEM CONTENT,1
+                  BR  14
         WORD      DS  XL8
         CONTENT   DS  XL50
-                END
+                  END
 
 
 2. TESTCOB2.cob 이름으로 아래와 같이 cobol 코드를 작성한다.
@@ -400,12 +402,13 @@ order: 3
 
         {
         "entry_list" : [
-        {
+          {
             "entry_name" : "TESTASM5",
-            "variable_parameter_list" : {
-            "max_length" : 10
-            }
-        }
+            "variable_parameter_list" : 
+                {
+                   "max_length" : 10
+                }
+          }
         ],
         "program_name" : "TESTASM5",
         "version" : 3
@@ -443,7 +446,7 @@ order: 3
         Length=[0000000000000050], Hex=[0x557365207661726961626c6520706172616d65746572206c6973742e20202020000000000000000000000000000000000000], Char=[Use variable parameter list.    ]
 
 
-### Pointer parameter 로 전달
+#### Pointer parameter 로 전달
 
 * 전달 받는 파라미터에 pointer 변수가 존재하는 경우 fixed parameter list 의 pointer type 으로 interface 를 작성해야 한다.
 
@@ -452,61 +455,61 @@ order: 3
 1. TESTASM6.asm 이름으로 아래와 같이 asm 코드를 작성한다.
 
         TESTASM6 CSECT
-                LR 12,15
-                USING TESTASM6,12
-                ST    14,SAVE
-                L     2,0(1)
-                USING PARAM,2
-                L     5,PTR
-                LA    3,CONVERT
+                 LR 12,15
+                 USING TESTASM6,12
+                 ST    14,SAVE
+                 L     2,0(1)
+                 USING PARAM,2
+                 L     5,PTR
+                 LA    3,CONVERT
         LOOP     EQU   *
-                MVC   CHAR,0(2)
-                CLI   CHAR,X'00'
-                BE    ENDPGM
-                BAL   11,CASECHK
-                LA    2,1(2)
-                BNE   LOOP
+                 MVC   CHAR,0(2)
+                 CLI   CHAR,X'00'
+                 BE    ENDPGM
+                 BAL   11,CASECHK
+                 LA    2,1(2)
+                 BNE   LOOP
         *
         NOTALPHA EQU   *
-                OFADBGMEM =C'NOT A ALPHABETIC',1
-                B     ENDPGM
+                 OFADBGMEM =C'NOT A ALPHABETIC',1
+                 B     ENDPGM
         *
         CASECHK  EQU   *
-                CLI   CHAR,C'A'
-                BL    LOWERCHK
-                CLI   CHAR,C'Z'
-                BH    LOWERCHK
-                B     UPTOLO
+                 CLI   CHAR,C'A'
+                 BL    LOWERCHK
+                 CLI   CHAR,C'Z'
+                 BH    LOWERCHK
+                 B     UPTOLO
         LOWERCHK CLI   CHAR,C'a'
-                BL    NOTALPHA
-                CLI   CHAR,C'z'
-                BH    NOTALPHA
-                B     LOTOUP
+                 BL    NOTALPHA
+                 CLI   CHAR,C'z'
+                 BH    NOTALPHA
+                 B     LOTOUP
         * 
         UPTOLO   EQU   *
-                AI    CHAR,X'20'
-                MVC   0(1,3),CHAR
-                LA    3,1(3)
-                BR    11
+                 AI    CHAR,X'20'
+                 MVC   0(1,3),CHAR
+                 LA    3,1(3)
+                 BR    11
         *
         LOTOUP   EQU   *
-                AI    CHAR,X'E0'
-                MVC   0(1,3),CHAR
-                LA    3,1(3)
-                BR    11
+                 AI    CHAR,X'E0'
+                 MVC   0(1,3),CHAR
+                 LA    3,1(3)
+                 BR    11
         *
         ENDPGM   EQU   *
-                MVC   0(26,5),CONVERT
-                L     14,SAVE
-                BR    14
+                 MVC   0(26,5),CONVERT
+                 L     14,SAVE
+                 BR    14
         SAVE     DS    F
         CHAR     DS    CL1
         CONVERT  DS    CL26
         PARAM    DSECT
-                DS    0CL30
+                 DS    0CL30
         MSG      DS    CL26
         PTR      DS    A(0)
-                END
+                 END
 
 
 2. TESTCOB3.cob 이름으로 아래와 같이 cobol 코드를 작성한다.
@@ -533,17 +536,18 @@ order: 3
 
         {
         "entry_list" : [
-        {
+         {
             "entry_name" : "TESTASM6",
-            "fixed_parameter_list" : [
-            {
-                "param_type" : "P",
-                "param_size" : 30,
-                "pointer_offset_list" : [ 26 ],
-                "pointer_size_list" : [ 26 ]
-            }
+            "fixed_parameter_list" : 
+            [
+                {
+                        "param_type" : "P",
+                        "param_size" : 30,
+                        "pointer_offset_list" : [ 26 ],
+                        "pointer_size_list" : [ 26 ]
+                }
             ]
-        }
+         }
         ],
         "program_name" : "TESTASM6",
         "version" : 3
@@ -571,7 +575,6 @@ order: 3
         Before converting : [AbCdEfGhIjKlMnOpQrStUVwXyZ]
         After converting : [aBcDeFgHiJkLmNoPqRsTuvWxYz]
 
-----------------------------------------------------------------
 
 ### ASM 에서 호출되는 COBOL
 
@@ -584,37 +587,37 @@ order: 3
 1. TESTASM7.asm 이름으로 아래와 같이 asm 코드를 작성한다.
 
         TESTASM7  CSECT
-                LR 12,15
-                USING TESTASM7,12
-                ST    14,SAVE
-                MVC   OPERAND1,=F'10'
-                MVC   OPERAND2,=F'10'
-                MVC   OPERATOR,=C'+'
-                CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
+                  LR 12,15
+                  USING TESTASM7,12
+                  ST    14,SAVE
+                  MVC   OPERAND1,=F'10'
+                  MVC   OPERAND2,=F'10'
+                  MVC   OPERATOR,=C'+'
+                  CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
         *
-                MVC   OPERAND1,=F'20'
-                MVC   OPERAND2,=F'10'
-                MVC   OPERATOR,=C'-'
-                CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
+                  MVC   OPERAND1,=F'20'
+                  MVC   OPERAND2,=F'10'
+                  MVC   OPERATOR,=C'-'
+                  CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
         *
-                MVC   OPERAND1,=F'30'
-                MVC   OPERAND2,=F'10'
-                MVC   OPERATOR,=C'*'
-                CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
+                  MVC   OPERAND1,=F'30'
+                  MVC   OPERAND2,=F'10'
+                  MVC   OPERATOR,=C'*'
+                  CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
         *
-                MVC   OPERAND1,=F'100'
-                MVC   OPERAND2,=F'10'
-                MVC   OPERATOR,=C'/'
-                CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
+                  MVC   OPERAND1,=F'100'
+                  MVC   OPERAND2,=F'10'
+                  MVC   OPERATOR,=C'/'
+                  CALL  SUBCOB1,(OPERAND1,OPERATOR,OPERAND2)
         *
-                L     14,SAVE
-                BR 14
+                  L     14,SAVE
+                  BR 14
         SAVE      DS F
         SUBCOB1   DC C'SUBCOB1'
         OPERAND1  DS F
         OPERATOR  DS CL1
         OPERAND2  DS F
-                END
+                  END
 
 
 2. SUBCOB1.cob 이름으로 아래와 같이 cobol 코드를 작성한다.
@@ -720,7 +723,7 @@ order: 3
         Answer is : [00000010+]
 
 
-### Pointer parameter 로 전달
+#### Pointer parameter 로 전달
 
 * ASM 에서 전달한 문자열을 Cobol 에서 대소문자를 치환하고 전달받은 pointer 변수가 가르키는 메모리에 반환하는 프로그램을 작성한다.
 
@@ -730,24 +733,24 @@ order: 3
 1. TESTASM8.asm 이름으로 아래와 같이 asm 코드를 작성한다.
 
         TESTASM8 CSECT
-                LR 12,15
-                USING TESTASM8,12
-                ST 14,SAVE
+                 LR 12,15
+                 USING TESTASM8,12
+                 ST 14,SAVE
         *
-                LA 2,CONVERT
-                ST 2,PTR
-                CALL SUBCOB2,(PARAM)
-                OFADBGMEM CONVERT,1
+                 LA 2,CONVERT
+                 ST 2,PTR
+                 CALL SUBCOB2,(PARAM)
+                 OFADBGMEM CONVERT,1
         *
-                L  14,SAVE
-                BR 14
+                 L  14,SAVE
+                 BR 14
         SAVE     DS F
         SUBCOB2  DC CL7'SUBCOB2'
         CONVERT  DC CL26' '
         PARAM    DS 0CL30
         STR      DC CL26'AbCdEfGhIjKlMnOpQrStUVwXyZ'
         PTR      DS A(0)
-                END
+                 END
 
 
 2. SUBCOB2.cob 이름으로 아래와 같이 cobol 코드를 작성한다.
@@ -860,8 +863,8 @@ order: 3
 
 
     > EXIT interface 에 호출된 application 으로 ofcobol 뿐만 아니라 OFPLI, Netcobol, C/C++ 으로 작성된 application 도 호출 가능하다.
-
-----------------------------------------------------------------
+    
+------    
 
 ## Dataset 운용
 
@@ -872,29 +875,29 @@ order: 3
 1. TESTASM9.asm 이름으로 아래와 같이 asm 코드를 작성한다.
 
         TESTASM9 CSECT
-                LR 12,15
-                USING TESTASM9,12
-                ST 14,SAVE
+                 LR 12,15
+                 USING TESTASM9,12
+                 ST 14,SAVE
         *
-                OPEN  (INDCB,(INPUT))
-                OPEN  (OTDCB,(OUTPUT))
+                 OPEN  (INDCB,(INPUT))
+                 OPEN  (OTDCB,(OUTPUT))
         *
         LOOP     EQU   *
-                GET   INDCB,IOAREA
-                L     2,YYYY
-                C     2,=CL4'2016'
-                BLE   PUTEMP
-                BH    LOOP
+                 GET   INDCB,IOAREA
+                 L     2,YYYY
+                 C     2,=CL4'2016'
+                 BLE   PUTEMP
+                 BH    LOOP
         PUTEMP   EQU   *
-                PUT   OTDCB,IOAREA
-                B     LOOP
+                 PUT   OTDCB,IOAREA
+                 B     LOOP
         *
         EXIT     EQU   *
-                CLOSE INDCB
-                CLOSE OTDCB
+                 CLOSE INDCB
+                 CLOSE OTDCB
         *
-                L 14,SAVE
-                BR    14
+                 L 14,SAVE
+                 BR    14
         *
         INDCB    DCB DDNAME=INDD,LRECL=80,BLKSIZE=1,DSORG=PS,MACRF=GM,         X
                     EODAD=EXIT
@@ -909,8 +912,8 @@ order: 3
         POS      DS    CL12
         EMAIL    DS    CL24
         SAVE     DS    F
-                LTORG
-                END
+                 LTORG
+                 END
 
 
 2. TEST.INPUT.DATA 를 아래와 같이 작성한다.
@@ -1039,44 +1042,44 @@ order: 3
 
 1. VSAMASM.asm 이름으로 아래와 같이 asm 코드를 작성한다
 
-        VSAMASM CSECT
-                LR 12,15
-                USING VSAMASM,12
-                ST 14,SAVE
+        VSAMASM  CSECT
+                 LR 12,15
+                 USING VSAMASM,12
+                 ST 14,SAVE
         *
-                OPEN KSACB
-                OPEN (OTDCB,(OUTPUT))
-                LA  3,KEYTABLE
+                 OPEN KSACB
+                 OPEN (OTDCB,(OUTPUT))
+                 LA  3,KEYTABLE
         *
         SETKEY   EQU *
-                LG  4,0(3)
-                CG  4,=XL8'FFFFFFFFFFFFFFFF'
-                BE  EXIT
-                MVC KEYAREA(8),0(3) 
-                LA  3,8(3)
+                 LG  4,0(3)
+                 CG  4,=XL8'FFFFFFFFFFFFFFFF'
+                 BE  EXIT
+                 MVC KEYAREA(8),0(3) 
+                 LA  3,8(3)
         GETREC   EQU *
-                GET RPL=KSRPL
-                LTR 15,15
-                BNZ ERROR
-                PUT OTDCB,IOAREA
-                MVC KEYAREA,EMPNO
-                B   SETKEY
+                 GET RPL=KSRPL
+                 LTR 15,15
+                 BNZ ERROR
+                 PUT OTDCB,IOAREA
+                 MVC KEYAREA,EMPNO
+                 B   SETKEY
         *
         ERROR    EQU *
-                OFADBGMEM =C'VSAM FILE I/O FAIL',1
-                L  15,=F'255'                                                         
-                B EXIT
+                 OFADBGMEM =C'VSAM FILE I/O FAIL',1
+                 L  15,=F'255'                                                         
+                 B EXIT
         *
         EXIT     EQU *
-                CLOSE KSACB
-                CLOSE OTDCB
-                L 14,SAVE
-                BR 14
+                 CLOSE KSACB
+                 CLOSE OTDCB
+                 L 14,SAVE
+                 BR 14
         *
         KEYTABLE DS 0CL24
-                DC CL8'2017145'
-                DC CL8'2016240'
-                DC XL8'FFFFFFFFFFFFFFFF'
+                 DC CL8'2017145'
+                 DC CL8'2016240'
+                 DC XL8'FFFFFFFFFFFFFFFF'
         KSACB    ACB DDNAME=KSACB,MACRF=(KEY,DIR,IN)
         KSRPL    RPL ACB=KSACB,AREA=IOAREA,AREALEN=80,ARG=KEYAREA,             X
                     KEYLEN=(8),OPTCD=(KEY,DIR,MVE,KEQ)
@@ -1090,7 +1093,7 @@ order: 3
         TITLE    DS CL11
         POS      DS CL12
         EMAIL    DS CL24
-                END
+                 END
 
 
 2. Vsam KSDS 데이터셋인 TEST.INPUT.DATA 의 copybook 을 아래 내용으로 $OPENFRAME_HOME/tsam/copybook/TEST.INPUT.DATA.cpy 에 저장한다.

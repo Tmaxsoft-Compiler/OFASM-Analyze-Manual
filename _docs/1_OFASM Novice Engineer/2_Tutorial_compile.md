@@ -1,13 +1,14 @@
 ---
-title: OFASM Tutorial Compile
+title: 컴파일
 category: OFASM Novice Engineer
 order: 2
 ---
 
 ## 목차 
-* 컴파일
-  * 컴파일 방법
-  * 컴파일하여 즉시 실행
+- [목차](#목차)
+- [컴파일](#컴파일)
+  - [컴파일 방법](#컴파일-방법)
+  - [컴파일하여 즉시 실행](#컴파일하여-즉시-실행)
 
 ---
 
@@ -58,7 +59,7 @@ order: 2
 
 ### 컴파일하여 즉시 실행
 
-1. _(컴파일 방법)_ 에서 작성한 TESTASM2.asm 를 -x 옵션으로 컴파일하여 즉시 실행한다.
+1. [컴파일 방법](#컴파일-방법) 에서 작성한 TESTASM2.asm 를 -x 옵션으로 컴파일하여 즉시 실행한다.
 
         $ ofasm TESTASM2.asm -x "OFASM"
 
