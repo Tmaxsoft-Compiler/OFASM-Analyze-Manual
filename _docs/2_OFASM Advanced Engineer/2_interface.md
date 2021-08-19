@@ -225,7 +225,7 @@ SIZE***DATA************************************************************
                 "param_type" : "P",
                 "param_size" : 40,
                 "pointer_offset_list" : [ 16, 20, 36 ],
-                "pointer_size_list" : [ 4, 4, 4]
+                "pointer_size_list" : [ 100, 200, 300]
             }
         ]
     }],
@@ -234,7 +234,7 @@ SIZE***DATA************************************************************
 "version" : 3
 }
 ```
-주의) JSON 파일 내의 pointer_offset_list 작성 시, 코볼의 포인터값은 4바이트로 상정하고 작성한다.
+주의) JSON 파일 내의 pointer_offset_list 작성 시, 코볼의 포인터값은 4바이트로 상정하고 작성한다. pointer_size_list 는 각 pointer 가 가르키는 버퍼의 사이즈로 작성한다.
 
 ##### JCL 파일에서 분석하는 방법
 
