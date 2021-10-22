@@ -5,15 +5,15 @@ order: 1
 ---
 
 ## 목차 
-- [목차](#목차)
-- [환경 구성](#환경-구성)
-  - [설치](#설치)
-  - [설치 확인](#설치-확인)
+- [설치](#설치)
+- [설치 확인](#설치-확인)
+- [매크로 설정](#매크로-설정)
+  - [MVS3.8 매크로 내려 받기](#mvs38-매크로-내려-받기)
+  - [매크로 경로 설정](#매크로-경로-설정)
 
 ---
 
-## 환경 구성
-### 설치
+# 설치
 
 * 인스톨러를 이용한 설치
 
@@ -42,7 +42,7 @@ order: 1
 
         $ source ~/.bash_profile
 
-### 설치 확인
+# 설치 확인
 
 1. ofasm help 메시지 확인.
 
@@ -80,3 +80,28 @@ order: 1
         OpenFrame Assembler 4
         Revision: 1099
         CommitID: c449ce7
+
+# 매크로 설정
+## MVS3.8 매크로 내려 받기
+
+대부분의 HLASM 자산은 IBM의 시스템 매크로를 사용하여 작성되어 있다. IBM 시스템 매크로의 무료 버전인 MVS3.8 매크로를 사용하면 대부분의 자산들은 컴파일이 가능하다.
+
+MVS3.8 매크로는 편의상 38 매크로라 부르고 있으며 아래 링크에서 다운 받을 수 있다.
+
+| 링크 | 비고 |
+| --- | --- |
+|[http://www.mainframe.eu/mvs38/](http://www.mainframe.eu/mvs38/) | |
+|[https://github.com/moshix/MVS38j.SYS1.MACLIB](https://github.com/moshix/MVS38j.SYS1.MACLIB) | 라이센스 정보 참조 가능 |
+|[https://github.com/Tmaxsoft-Compiler/OFASM-MAC-LIB](https://github.com/Tmaxsoft-Compiler/OFASM-MAC-LIB) | OFASM 팀 관리용 |
+
+## 매크로 경로 설정
+
+다운 받은 매크로를 적절한 경로에 모아두셨다면, 환경 변수를 설정해야 한다.
+
+`OFASM_MACLIB` 환경 변수를 통해 매크로 디렉토리의 경로를 설정한다.
+
+```
+export OFASM_MACLIB=/home/oframe7/ofasm/maclib/ofmac:/home/oframe7/ofasm/maclib/38mac
+```
+
+> :warning: ofmac 경로는 다른 매크로 경로보다 항상 앞서야한다.
