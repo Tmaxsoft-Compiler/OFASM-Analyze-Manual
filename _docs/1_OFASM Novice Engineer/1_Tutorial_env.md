@@ -47,39 +47,47 @@ order: 1
 1. ofasm help 메시지 확인.
 
         $ ofasm --help
-        OpenFrame Assembler 4
+        OpenFrame Assembler 4 r1700
 
         Usage : ofasm [options] input_file
                 ofasm input_file [[-x] <params...>]
                 ofasm input_file [( [-f] <value> | [--entry] <value> | [-r] <reg_no> <value> ) [-x] <params...>]
 
         Options:
-          -E : only preprocess
-          -S : only assembly
-          -H, --help : help information
-          -g : produce debugging information to be used by the ofasm_debugger
-          -x <params...> : execute instantly assembler program in command line by the user-specified parameters
-                          parameters can be used only HEX value
-          -f <filepath> : the json-formatted file that defined parameter information
-                          this option can only be used with -x option
-          -r <reg_no> <value> : specify register value before running
+        -E : only preprocess
+        -S : only assembly
+        -H, --help : help information
+        -g : produce debugging information to be used by the ofdev ofasm debugger
+        -o : specify the output file name. create an entry with the file name.
+        -x <params...> : execute instantly assembler program in command line by the user-specified parameters
+                        parameters can be used only HEX value
+        -f <filepath> : the json-formatted file that defined parameter information
+                        this option can only be used with -x option
+        -r <reg_no> <value> : specify register value before running
                                 this option can only be used with -x option
-          --entry <entryname> : specify the entryname to be run
+        --entry <entryname> : specify the entryname to be run
                                 this option can only be used with -x option
-          --version : show ofasm version
-          --list : show supported instruction
-          --save-punch : save punch output file
-          --enable-cics : enable cics preprocessing
-          --enable-spm : enable structured programming macro
-          --debug : show debug message
-          --license : show license information
+        --version : show ofasm version
+        --list : show supported instruction
+        --save-punch : save punch output file
+        --enable-cics : enable cics preprocessing
+        --enable-spm : enable structured programming macro
+        --debug : show debug message
+        --license : show license information
+        --force-rmode31 : enable 31 rmode enforcement
+        --no-reuse: enable NOREUSE option
+        --sysparm <string>: set SYSPARM variable for preprocessor
+        --enable-outdated: utilize outdated instruction. Use "--list" option to check instruction list.
+        --amode < 24 | 31 | ANY > : set AMODE to the given addressing mode. 
+        --rmode < 24 | 31 | ANY > : set RMODE to teh given residence mode. 
+        --report : Create a report file for assembly information. 
 
 2. ofasm 버전 확인.
 
         $ ofasm --version
         OpenFrame Assembler 4
-        Revision: 1099
-        CommitID: c449ce7
+        Revision: 1700
+        CommitID: 45b3060c4
 
 # 매크로 설정
 ## MVS3.8 매크로 내려 받기

@@ -73,7 +73,7 @@ OFASM 프로그램의 파라미터 리스트가 포함할 수 있는 파라미�
     }
 ],
 "program_name" : "PROGNAME",
-"version" : 3,
+"version" : 4,
 "interface_type" : "entry"
 }
 ```
@@ -118,7 +118,7 @@ OFASM 프로그램의 파라미터 리스트가 포함할 수 있는 파라미�
 7. "interface_type" : STRING
    - 인터페이스의 타입을 정의한다. "interface_type" 을 정의하지 않으면, 기본적으로 entry 인터페이스를 생성한다. 정의할 수 있는 타입은 "entry", "load", "exit" 가 있다. 생성하고자 하는 인터페이스 타입을 정의해주면 해당 인터페이스를 생성하게 된다.
 
-아래 커맨드를 입력하여 작성된 JSON 파일을 통해 인터페이스 파일(.cpp파일)을 생성할 수 있다.
+아래 커맨드를 입력하여 작성된 JSON 파일을 통해 인터페이스 파일(.cpp파일) 및 컴파일 파일(.so)을 생성할 수 있다.
 
 <pre>
     ofasmif –i XXXX.json
@@ -192,7 +192,7 @@ SIZE***DATA************************************************************
     }],
 "program_name" : "PROGGMT",
 
-"version" : 3
+"version" : 4
 }
 ```
 
@@ -231,7 +231,7 @@ SIZE***DATA************************************************************
     }],
 "program_name" : "ASMPTR",
 
-"version" : 3
+"version" : 4
 }
 ```
 주의) JSON 파일 내의 pointer_offset_list 작성 시, 코볼의 포인터값은 4바이트로 상정하고 작성한다.
@@ -272,21 +272,13 @@ JCL에서 호출하는 어셈블러에 대한 인터페이스는 언제나 고�
     }],
 "program_name" : "PROGTEMP",
 
-"version" : 3
+"version" : 4
 }
 ```
 
 ##### 어셈블러 파일에서 분석하는 방법
 
 위 두가지 방법으로 파라미터 길이 분석이 힘든 경우에는 본 방법을 사용해야 한다. 이 경우는 다양한 케이스가 존재하므로 연구소측으로 문의하도록 한다.
-
-#### Entry 인터페이스 파일 컴파일
-
-아래와 같은 g++ 커맨드를 입력하여 JSON 파일을 사용하여 생성된 인터페이스 파일(.cpp파일)을 통해 so 파일을 생성한다.
-
-<pre>
-g++ -shared –fPIC –o XXXX.so XXXX_OFASM_VM_ENTRY.cpp –L$OFASM_HOME/lib –lofasmVM
-</pre>
 
 ### Exit 인터페이스
 
@@ -305,14 +297,14 @@ EXIT 인터페이스는 다음과 같은 JSON 파일을 통해 생성할 수도 
     }
 ],
 "program_name" : "PROGNAME",
-"version" : 3,
+"version" : 4,
 "interface_type" : "exit"
 }
 ```
 
 - "fixed_parameter_cnt" (가칭) : 외부 프로그램(코볼 등)에서 파라미터를 사용하지 않는다면 0, 사용한다면 해당 파라미터의 갯수를 지정해준다.
 
-마찬가지로 아래 커맨드를 입력하여 작성한 JSON 파일을 통해 Exit 인터페이스 파일(.cpp파일)을 생성할 수 있다.
+마찬가지로 아래 커맨드를 입력하여 작성한 JSON 파일을 통해 Exit 인터페이스 파일(.cpp파일) 및 컴파일 파일(_OFASM_VM_EXIT.so)을 생성할 수 있다.
 
 <pre>
     ofasmif –i XXXX.json
@@ -352,16 +344,6 @@ int TESTCOB_OFASM_VM_EXIT(char* p0, char* p1, char* p2)
 ```
 
 정의된 함수의 이름에 주목하길 바란다. 함수의 이름은 반드시 *“호출할 프로그램의 이름 + _OFASM_VM_EXIT”* 가 되어야 한다. 이는 OFASM에서 Exit 인터페이스를 호출하기 위해 고유하게 사용하는 이름 규약이다. 
-
-#### Exit 인터페이스 파일 컴파일
-
-Exit 인터페이스 파일은 아래와 같은 명령어로 컴파일 한다.
-
-<pre>
-g++ -fPIC –shared –o TESTCOB_OFASM_VM_EXIT.so TESTCOB_OFASM_VM_EXIT.cpp  –L./ TESTCOB.so
-</pre>
-
- 출력 파일의 이름에도 역시 주목하길 바란다. Exit 인터페이스에 대한 함수 이름과 함께 파일 이름도 동일한 규약을 가진다. *“호출할 프로그램의 이름 + _OFASM_VM_EXIT.so”* 가 되어야 한다. 
 
 
 ### Load 인터페이스
@@ -490,12 +472,8 @@ int LTEST_OFASM_VM_LOAD(char *asm_ptr, char *cob_ptr, int asm_size)
 }
 ```
 
-#### Load 인터페이스 파일 컴파일
-
-Load 인터페이스 파일은 아래와 같은 명령어로 컴파일 한다.
+마찬가지로 아래 커맨드를 입력하여 작성한 JSON 파일을 통해 Load 인터페이스 파일(.cpp파일) 및 컴파일 파일(_OFASM_VM_LOAD.so)을 생성할 수 있다.
 
 <pre>
-g++ -fPIC –shared –o LTEST_OFASM_VM_LOAD.so LTEST_OFASM_VM_LOAD.cpp
+    ofasmif –i XXXX.json
 </pre>
-
- 출력 파일의 이름에도 역시 주목하길 바란다. Load 인터페이스에 대한 함수 이름과 함께 파일 이름도 동일한 규약을 가진다. *“호출할 프로그램의 이름 + _OFASM_VM_LOAD.so”* 가 되어야 한다. 

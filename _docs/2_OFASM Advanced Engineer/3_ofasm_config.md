@@ -30,3 +30,13 @@ order: 3
     * **0** : 기본값. 본 기본값을 사용할 때에 OFASM VM은 1024 MB (1 GB)의 메모리를 사용한다.
     * **32 ~ 2048** : OFASM 이 설정한 값만큼의 메모리를 메가바이트(MB) 단위로 사용한다.
     * 적용범위: 런타임
+* **MAKE_PLIST_IN_EXIT** : ON\OFF. ASM에서 NONASM로 호출 시 파라미터 갯수가 10개가 초과된 경우 사용한다.
+* **CHECK_OBJ_VERSION** : ON/OFF. 실행되는 asmo 모듈과 현재 버전을 비교할떄 사용한다.
+* **USE_CODE_CONVERSION** : OFATOE, OFETOA에 사용할 cpm 정보를 기입한다.
+    * **"ASCII_TO_EBCDIC"** : cpm_name
+    * **"EBCDIC_TO_ASCII"** : cpm_name
+    * **"SOSI_TYPE"** : integer 
+* **HEAP_MONITOR** : ON/OFF. heap 영역의 할당과 해제시 정보를 출력한다.
+* **USE_TCFH_FILE_IO** : ON/OFF. file handler를 tcfh로 사용할지 여부를 결정한다. 
+* **FORCE_RMODE_31** : rmode 31를 강제로 지정할 모듈 이름을 json array형태로 기입한다.
+* **CONTIGUOUS_RMODE_31** : ON/OFF. 로드되어지는 모든 모듈이 rmode31일 때 global rmode도 31로 지정할지 여부를 결정한다.

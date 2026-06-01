@@ -32,7 +32,7 @@ MVS38 매크로 중 일부 z/OS 사양 지원을 위해 OFASM이 따로 제공�
 |   매크로이름      |   비고                                |
 |   ---             |   ---                                 |
 | ATTACH, DETACH    | 프로세스 기반인 OFASM에서 지원 불가   |
-| STAE, ESTAE       | Exit 프로그램 등록 기능 없음          |
+| STAE           | Exit 프로그램 등록 기능 없음          |
 | STIMERM           | TIMEOUT 후에 OFASM 프로그램으로 리턴하는 기능 없음. 지원 불가 |
 | SPIE, ESPIE       | 일부 기능 지원 불가                   |
 | DYNALLOC          | ALLOC, DEALLOC 기능만 지원            |
